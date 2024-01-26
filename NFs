@@ -1,1 +1,36 @@
-step 1 install 
+
+How to build an NFS server
+Setting up an NFS (Network File System) server allows you to share directories and files with other machines over a network. Here's a basic guide to building an NFS server on a Linux system:
+
+Step 1: Install NFS Server Packages
+Ensure that the NFS server packages are installed on your machine. The package names may vary depending on your Linux distribution. For example, on Ubuntu, you can install them using:
+
+sudo apt update
+sudo apt install nfs-kernel-server
+Step 2: Configure Exports
+Define which directories you want to share by configuring the exports file. Open the /etc/exports file and add entries for the directories you want to share:
+
+sudo nano /etc/exports
+Add lines like this:
+
+/path/to/shared_directory client_ip(rw,sync,no_subtree_check)
+Replace /path/to/shared_directory with the actual path of the directory you want to share and client_ip with the IP address or subnet of the client machine. The options rw (read-write), sync, and no_subtree_check are common options.
+
+Save the file and exit.
+
+Step 3: Restart NFS Server
+Restart the NFS server to apply the changes:
+
+sudo service nfs-kernel-server restart
+
+Step 4: Configure Firewall (if necessary)
+If you are using a firewall, make sure to allow NFS traffic. For example, on Ubuntu with UFW:
+
+sudo ufw allow from client_ip to any port nfs
+sudo ufw enable
+
+Step 5: Mounting NFS Shares on Clients
+On the client machines, you can mount the shared directory using the mount command. For example:
+
+sudo mount server_ip:/path/to/shared_directory /mnt/local_mount_point
+Replace server_ip, /path/to/shared_directory, and /mnt/local_mount_point with your server's IP, shared directory path, and the local mount point on the client.
