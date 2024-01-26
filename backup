@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Source directory to be backed up
+source_directory="/path/to/source_directory"
+
+# Backup directory
+backup_directory="/path/to/backup_directory"
+
+# Log file to track backup status
+log_file="/path/to/backup.log"
+
+# Function to perform the backup
+perform_backup() {
+        echo "Starting backup at $(date)" >> "$log_file"
+            
+                # Use rsync to perform the backup
+                    rsync -av --delete "$source_directory" "$backup_directory" >> "$log_file" 2>&1
+                        
+                            if [ $? -eq 0 ]; then
+                                    echo "Backup successful!"
+                                        else
+                                                echo "Backup failed. Check the log file for details."
+                                                    fi
+}
+
+# Check if seven days have passed since the last backup
+if [ ! -f "$log_file" ] || [ $(find "$log_file" -mtime +6) ]; then
+    perform_backup
+    else
+        echo "No need for backup today. Last backup was within the last seven days."
+        fi
+        
+}
